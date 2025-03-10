@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Form Filler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Smart Form Filler</h1>
+      <div class="toggle-container">
+        <span class="toggle-label">Enabled</span>
+        <label class="toggle">
+          <input type="checkbox" id="enabledToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-button" data-tab="forms">Saved Forms</button>
+      <button class="tab-button" data-tab="settings">Settings</button>
+    </div>
+    
+    <div class="tab-content">
+      <!-- Dashboard Tab -->
+      <div class="tab-pane active" id="dashboard">
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-value" id="formsDetected">0</div>
+            <div class="stat-label">Forms Detected</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="formsFilled">0</div>
+            <div class="stat-label">Forms Filled</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="fieldsLearned">0</div>
+            <div class="stat-label">Fields Learned</div>
+          </div>
+        </div>
+        
+        <div class="action-panel">
+          <h2>Current Page</h2>
+          <div id="currentPageInfo">No forms detected on this page</div>
+          <button id="fillFormsButton" class="action-button">Auto-Fill Forms</button>
+          <button id="scanPageButton" class="action-button">Scan Page for Forms</button>
+        </div>
+      </div>
+      
+      <!-- Saved Forms Tab -->
+      <div class="tab-pane" id="forms">
+        <div class="search-bar">
+          <input type="text" id="searchForms" placeholder="Search by website...">
+        </div>
+        
+        <div class="saved-forms-list" id="savedFormsList">
+          <div class="empty-state">No saved forms yet</div>
+        </div>
+        
+        <div class="form-details" id="formDetails">
+          <div class="empty-state">Select a form to view details</div>
+        </div>
+      </div>
+      
+      <!-- Settings Tab -->
+      <div class="tab-pane" id="settings">
+        <div class="settings-group">
+          <h3>Auto-Fill Settings</h3>
+          
+          <div class="setting-item">
+            <label for="autoFillDelay">Delay before auto-filling (ms)</label>
+            <input type="number" id="autoFillDelay" min="0" max="5000" step="100" value="1000">
+          </div>
+          
+          <div class="setting-item">
+            <label for="minimumConfidence">Minimum confidence for field matching (%)</label>
+            <input type="range" id="minimumConfidence" min="50" max="95" step="5" value="70">
+            <span id="confidenceValue">70%</span>
+          </div>
+          
+          <div class="setting-item checkbox">
+            <label for="enablePasswordFill">
+              <input type="checkbox" id="enablePasswordFill">
+              Enable password field auto-filling (not recommended)
+            </label>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>Data Management</h3>
+          
+          <div class="setting-item checkbox">
+            <label for="collectStatistics">
+              <input type="checkbox" id="collectStatistics" checked>
+              Collect usage statistics
+            </label>
+          </div>
+          
+          <div class="action-buttons">
+            <button id="resetStatsButton" class="secondary-button">Reset Statistics</button>
+            <button id="exportDataButton" class="secondary-button">Export Saved Data</button>
+            <button id="clearDataButton" class="danger-button">Clear All Saved Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Smart Form Filler learns from your form entries and uses ML to recognize similar fields</p>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
