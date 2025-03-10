@@ -193,6 +193,12 @@ function setupFormMonitoring() {
 
     const allForms = [...forms, ...possibleForms];
 
+    // Attempt to auto-fill immediately when forms are found
+    if (allForms.length > 0) {
+      logDebug("Forms detected, attempting auto-fill");
+      attemptAutoFill();
+    }
+
     allForms.forEach((form) => {
       try {
         // Track form submission - use capture to ensure we get the event
@@ -294,6 +300,72 @@ function setupFormMonitoring() {
   }
 }
 
+// Initialize with retry mechanism and auto-fill
+function initialize() {
+  try {
+    // Check if the ML engine is available
+    if (!window.mlEngine) {
+      logDebug("ML Engine not loaded yet, retrying in 1 second...");
+      setTimeout(initialize, 1000);
+      return;
+    }
+
+    // Setup form monitoring (which now includes auto-fill)
+    setupFormMonitoring();
+
+    // Setup mutation observer to detect dynamically added forms
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+          const addedForms = [];
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeName === "FORM") {
+              addedForms.push(node);
+            } else if (node.querySelectorAll) {
+              const forms = node.querySelectorAll(
+                'form, div[role="form"], div.form, .form-container'
+              );
+              addedForms.push(...forms);
+            }
+          });
+
+          if (addedForms.length > 0) {
+            logDebug(`Detected ${addedForms.length} new forms`);
+            // Auto-fill new forms as they're added
+            attemptAutoFill();
+          }
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["style", "class"], // Watch for visibility changes
+    });
+
+    // Also watch for URL changes in single-page applications
+    let lastUrl = location.href;
+    new MutationObserver(() => {
+      const url = location.href;
+      if (url !== lastUrl) {
+        lastUrl = url;
+        logDebug("URL changed, checking for forms");
+        setTimeout(() => {
+          setupFormMonitoring();
+        }, 1000); // Wait for new content to load
+      }
+    }).observe(document, { subtree: true, childList: true });
+
+    logDebug("Initialization complete");
+  } catch (error) {
+    handleError(error, "initialize");
+    // Retry initialization after a delay
+    setTimeout(initialize, 2000);
+  }
+}
+
 // Attempt to auto-fill forms on the page with improved matching
 function attemptAutoFill() {
   logDebug("Attempting auto-fill");
@@ -342,6 +414,20 @@ function attemptAutoFill() {
           // Skip password fields for security
           if (input.type === "password") {
             logDebug("Skipping password field for security");
+            return;
+          }
+
+          // Skip fields that already have a value
+          if (
+            input.value &&
+            input.type !== "checkbox" &&
+            input.type !== "radio"
+          ) {
+            logDebug(
+              `Skipping field ${
+                input.name || input.id
+              } as it already has a value`
+            );
             return;
           }
 
@@ -490,62 +576,6 @@ function handleMessages(request, sender, sendResponse) {
   }
 
   return true; // Keep the message channel open for async response
-}
-
-// Initialize with retry mechanism
-function initialize() {
-  try {
-    // Check if the ML engine is available
-    if (!window.mlEngine) {
-      logDebug("ML Engine not loaded yet, retrying in 1 second...");
-      setTimeout(initialize, 1000);
-      return;
-    }
-
-    // Setup form monitoring
-    setupFormMonitoring();
-
-    // Setup mutation observer to detect dynamically added forms
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length) {
-          const addedForms = [];
-          mutation.addedNodes.forEach((node) => {
-            if (node.nodeName === "FORM") {
-              addedForms.push(node);
-            } else if (node.querySelectorAll) {
-              const forms = node.querySelectorAll(
-                'form, div[role="form"], div.form, .form-container'
-              );
-              addedForms.push(...forms);
-            }
-          });
-
-          if (addedForms.length > 0) {
-            logDebug(`Detected ${addedForms.length} new forms`);
-            addedForms.forEach((form) => {
-              try {
-                setupFormMonitoring();
-              } catch (error) {
-                handleError(error, "handling dynamically added form");
-              }
-            });
-          }
-        }
-      });
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    logDebug("Initialization complete");
-  } catch (error) {
-    handleError(error, "initialize");
-    // Retry initialization after a delay
-    setTimeout(initialize, 2000);
-  }
 }
 
 // Start initialization when the document is ready

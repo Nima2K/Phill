@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Smart Form Filler</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Phill - Automatic Form Filler</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Smart Form Filler</h1>
+      <div class="brand">
+        <img src="icons/icon48.png" alt="Phill Logo" class="logo">
+        <h1>Phill</h1>
+      </div>
       <div class="toggle-container">
         <span class="toggle-label">Enabled</span>
         <label class="toggle">
@@ -18,9 +22,15 @@
     </div>
     
     <div class="tabs">
-      <button class="tab-button active" data-tab="dashboard">Dashboard</button>
-      <button class="tab-button" data-tab="forms">Saved Forms</button>
-      <button class="tab-button" data-tab="settings">Settings</button>
+      <button class="tab-button active" data-tab="dashboard">
+        <i class="fas fa-chart-bar"></i> Dashboard
+      </button>
+      <button class="tab-button" data-tab="forms">
+        <i class="fas fa-save"></i> Saved Forms
+      </button>
+      <button class="tab-button" data-tab="settings">
+        <i class="fas fa-cog"></i> Settings
+      </button>
     </div>
     
     <div class="tab-content">
@@ -44,8 +54,12 @@
         <div class="action-panel">
           <h2>Current Page</h2>
           <div id="currentPageInfo">No forms detected on this page</div>
-          <button id="fillFormsButton" class="action-button">Auto-Fill Forms</button>
-          <button id="scanPageButton" class="action-button">Scan Page for Forms</button>
+          <button id="fillFormsButton" class="action-button">
+            <i class="fas fa-magic"></i> Auto-Fill Forms
+          </button>
+          <button id="scanPageButton" class="action-button">
+            <i class="fas fa-search"></i> Scan Page for Forms
+          </button>
         </div>
       </div>
       
@@ -108,7 +122,9 @@
     </div>
     
     <div class="footer">
-      <p>Smart Form Filler learns from your form entries and uses ML to recognize similar fields</p>
+      <a href="https://nimanajaflou.com" target="_blank" class="creator-link">
+        Created by Nima
+      </a>
     </div>
   </div>
   

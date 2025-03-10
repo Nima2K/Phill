@@ -140,8 +140,8 @@ function loadFormsData() {
         numForms !== 1 ? "s" : ""
       }</div>
           <div class="website-actions">
-            <button class="icon-button view-btn" title="View forms">👁️</button>
-            <button class="icon-button delete-btn" title="Delete all forms for this website">🗑️</button>
+            <button class="icon-button view-btn" title="View forms">View</button>
+            <button class="icon-button delete-btn" title="Delete all forms for this website">Delete</button>
           </div>
         `;
 
@@ -193,8 +193,8 @@ function showWebsiteForms(website, websiteForms) {
       formFields.length !== 1 ? "s" : ""
     }</div>
         <div class="form-actions">
-          <button class="icon-button view-fields-btn" title="View fields">👁️</button>
-          <button class="icon-button delete-form-btn" title="Delete this form">🗑️</button>
+          <button class="icon-button view-fields-btn" title="View fields">View</button>
+          <button class="icon-button delete-form-btn" title="Delete this form">Delete</button>
         </div>
       `;
 
@@ -226,7 +226,7 @@ function showFormFields(website, formId, fields) {
   const header = document.createElement("div");
   header.className = "form-details-header";
   header.innerHTML = `
-      <button class="back-button">← Back</button>
+      <button class="back-button">Back</button>
       <h3>Form Fields</h3>
     `;
 

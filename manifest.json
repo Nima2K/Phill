@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Smart Form Filler",
+    "name": "Phill - Automatic Form Filler",
     "version": "1.0",
-    "description": "Intelligently learns and auto-fills forms based on your past entries",
+    "description": "Phill learns how you fill forms and automatically fills them for you using advanced pattern recognition.",
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
@@ -33,5 +33,6 @@
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
-    }
+    },
+    "author": "Nima Najaflou"
   }
